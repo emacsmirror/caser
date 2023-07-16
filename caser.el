@@ -6,15 +6,7 @@
   (interactive "*p")
   (if (use-region-p)
       (camelcase-region (region-beginning) (region-end))
-    (progn (camelcase-word arg)
-
-           ;;this handles ending in the middle of a snake_cased word.
-           (while (looking-at "_+\\w")
-             (camelcase-word 1))
-
-           ;;drop underlines at the end of the word
-           (while (looking-at "_")
-             (delete-char 1)))))
+    (camelcase-word arg)))
 
 ;;how does this work on caps?
 (defun camelcase-region (region-beginning region-end)

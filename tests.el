@@ -69,6 +69,12 @@
                    "hi_mom and_other stuff_here"
                    (camelcase-dwim 2)))))
 
+(ert-deftest camelcase-dwim/snakecase-three-arg-complicated-words ()
+  (should (equal "hiThere thisIsWayFun youGuys| and_more"
+                 (on-temp-buffer-point
+                   "|hi_there this_is_way_fun you_guys and_more"
+                   (camelcase-dwim 3)))))
+
 ;;snakecase_tests
 ;;region tests
 (ert-deftest snakecase-region/no-change ()
