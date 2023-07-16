@@ -67,7 +67,7 @@
         (ending-point (progn (looking-at (rx-to-string
                                           `(repeat 0 ,(or words 1)
                                                    (seq (zero-or-more blank)
-                                                        ,case//quoted-word-regexp))))
+                                                        (one-or-more (not space))))))
                              (match-end 0))))
     (goto-char ending-point)
     (camelcase-region starting-point ending-point)))
