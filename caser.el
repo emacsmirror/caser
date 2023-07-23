@@ -1,4 +1,4 @@
-;;; caser.el -- Change the casing of text, from camelCase to dash-case to snake_case.
+;;; caser.el -- Change the casing of text, from camelCase to dash-case to snake_case. -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
