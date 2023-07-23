@@ -1,3 +1,9 @@
+;;; caser.el -- Change the casing of text, from camelCase to dash-case to snake_case.
+
+;;; Commentary:
+
+;;; Code:
+
 (defun camelcase-dwim (arg)
   "Camelcase words in the region, if active; if not, camelcase word at point.
 
@@ -204,3 +210,6 @@ to dashcase ARG words."
 ;; (bind-key "M-C" #'camelcase-dwim)
 ;; (bind-key "M-S" #'snakecase-dwim)
 ;; (bind-key "M-D" #'dashcase-dwim)
+
+(provide 'caser)
+;;; caser.el ends here
