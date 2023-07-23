@@ -46,6 +46,10 @@ to camelcase ARG words."
                  (1+ (point))))
 
 (defun caser/forward-word (number-of-words)
+  "Move forward NUMBER-OF-WORDS words, defaulting to 1.
+
+This differs from `forward-word' in that the only separators it
+cares about are whitespace."
   (interactive "P")
   (if (> number-of-words 0)
       (progn (looking-at (rx-to-string
