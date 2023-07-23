@@ -57,12 +57,16 @@ cares about are whitespace."
                                    (seq (zero-or-more space)
                                         (one-or-more (not space))))))
              (goto-char (match-end 0)))
-    (dotimes (n (- number-of-words))
-      (when (looking-back (rx (seq (one-or-more (not space))
-                                   (zero-or-more space)))
-                          (point-min)
-                          t)
-        (goto-char (match-beginning 0))))))
+    (when (looking-back (rx-to-string
+                         `(repeat ,(- number-of-words)
+                                  (seq (or space string-start)
+                                       (one-or-more (not space))
+                                       (zero-or-more space))))
+                        (point-min)
+                        t)
+      (goto-char (match-beginning 0))
+      (when (looking-at (rx (one-or-more space)))
+        (goto-char (match-end 0))))))
 
 (defun camelcase-word (&optional words)
   "Camelcase WORDS words forward from point."
