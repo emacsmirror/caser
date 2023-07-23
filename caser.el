@@ -1,14 +1,14 @@
 (defun camelcase-dwim (arg)
   "Camelcase words in the region, if active; if not, camelcase word at point.
-  If the region is active, this function calls `camelcase-region'.
-  Otherwise, it calls `camelcase-word', with prefix argument passed to it
-  to camelcase ARG words."
+
+If the region is active, this function calls `camelcase-region'.
+Otherwise, it calls `camelcase-word', with prefix argument passed to it
+to camelcase ARG words."
   (interactive "*p")
   (if (use-region-p)
       (camelcase-region (region-beginning) (region-end))
     (camelcase-word arg)))
 
-;;how does this work on caps?
 (defun camelcase-region (region-beginning region-end)
   "Camelcase the region between REGION-BEGINNING and REGION-END.
 
@@ -74,9 +74,10 @@
 
 (defun snakecase-dwim (arg)
   "Snakecase words in the region, if active; if not, snakecase word at point.
-  If the region is active, this function calls `snakecase-region'.
-  Otherwise, it calls `snakecase-word', with prefix argument passed to it
-  to snakecase ARG words."
+
+If the region is active, this function calls `snakecase-region'.
+Otherwise, it calls `snakecase-word', with prefix argument passed to it
+to snakecase ARG words."
   (interactive "*p")
   (if (use-region-p)
       (snakecase-region (region-beginning) (region-end))
@@ -182,9 +183,10 @@
 
 (defun dashcase-dwim (arg)
   "Dashcase words in the region, if active; if not, dashcase word at point.
-  If the region is active, this function calls `dashcase-region'.
-  Otherwise, it calls `dashcase-word', with prefix argument passed to it
-  to dashcase ARG words."
+
+If the region is active, this function calls `dashcase-region'.
+Otherwise, it calls `dashcase-word', with prefix argument passed to it
+to dashcase ARG words."
   (interactive "*p")
   (if (use-region-p)
       (dashcase-region (region-beginning) (region-end))
