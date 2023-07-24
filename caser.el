@@ -39,15 +39,8 @@ to camelcase ARG words."
 
     (goto-char (marker-position end-marker))))
 
-(defun downcase-char ()
-  "Downcase the char at point."
-  (interactive)
-  (downcase-region (point)
-                   (1+ (point))))
-
 (defun upcase-char ()
   "Upcase the char at point."
-  (interactive)
   (upcase-region (point)
                  (1+ (point))))
 
