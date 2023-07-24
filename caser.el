@@ -7,6 +7,8 @@
 (defun camelcase-dwim (arg)
   "Camelcase words in the region, if active; if not, camelcase word at point.
 
+This converts it from dash-case or snake_case to camelCase.
+
 If the region is active, this function calls `camelcase-region'.
 Otherwise, it calls `camelcase-word', with prefix argument passed to it
 to camelcase ARG words."
@@ -82,6 +84,8 @@ cares about are whitespace."
 (defun snakecase-dwim (arg)
   "Snakecase words in the region, if active; if not, snakecase word at point.
 
+This converts it from camelCase or dash-case to snake_case.
+
 If the region is active, this function calls `snakecase-region'.
 Otherwise, it calls `snakecase-word', with prefix argument passed to it
 to snakecase ARG words."
@@ -147,9 +151,9 @@ to snakecase ARG words."
                           (point))))
 
 (defun dashcase-region (region-beginning region-end)
-  "Snakecase the region between REGION-BEGINNING and REGION-END.
+  "Dashcase the region between REGION-BEGINNING and REGION-END.
 
-  This converts it from camelCase or dash-case to snake_case."
+  This converts it from camelCase or snake_case to dash-case."
   (interactive "*r")
   (goto-char region-beginning)
   (let ((end-marker (make-marker))
@@ -190,6 +194,8 @@ to snakecase ARG words."
 
 (defun dashcase-dwim (arg)
   "Dashcase words in the region, if active; if not, dashcase word at point.
+
+This converts it from camelCase or snake_case to dash-case.
 
 If the region is active, this function calls `dashcase-region'.
 Otherwise, it calls `dashcase-word', with prefix argument passed to it
