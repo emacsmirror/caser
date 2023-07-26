@@ -1,3 +1,92 @@
+(defmacro on-temp-buffer (string &rest body)
+  "Insert STRING into a temp buffer, then run BODY on the temp buffer.
+
+Point starts at the beginning of the buffer, or where a pipe character
+occurs.  To insert an actual pipe, include two pipes.
+
+After running BODY, the entire buffer is returned as a string."
+  (declare (indent 0) (debug t))
+  `(with-temp-buffer
+     (insert ,string)
+     (on-temp-buffer//preprocess-buffer)
+
+     ,@body
+     (buffer-string)))
+
+(defmacro on-temp-buffer-point (string &rest body)
+  "Insert STRING into a temp buffer, then run BODY on the temp buffer.
+
+Point starts at the beginning of the buffer, or where a pipe character
+occurs.  To insert an actual pipe, include two pipes.
+
+After running BODY, the entire buffer is returned as a string.  In
+this returned string, point is indicated by a pipe character.  Pipe
+characters in the string are replaced with a double pipe."
+  (declare (indent 0) (debug t))
+  `(with-temp-buffer
+     (insert ,string)
+     (on-temp-buffer//preprocess-buffer)
+
+     ,@body
+
+     (on-temp-buffer//postprocess-buffer-for-point)
+     (buffer-string)))
+
+(defmacro on-temp-buffer-region (string &rest body)
+  "Insert STRING into a temp buffer, run BODY, and return the region.
+
+Point starts at the beginning of the buffer, or where a pipe character
+occurs.  To insert an actual pipe, include two pipes."
+  (declare (indent 0) (debug t))
+  `(with-temp-buffer
+     (insert ,string)
+     (on-temp-buffer//preprocess-buffer)
+
+     ,@body
+     (buffer-substring (region-beginning) (region-end))))
+
+
+(defun on-temp-buffer//preprocess-buffer ()
+  "Preprocess the current buffer for on-temp-buffer before body code can run.
+
+To do this:
+
+1. Move point to the location of a single pipe by itself.
+2. Replace all escaped pipe characters (\\|) with a single pipe."
+  (goto-char (point-min))
+  (let ((point-to-start-with (point-min)))
+    (while (re-search-forward (rx (or "|" "\\")) nil t)
+      (let ((string-matched (match-string 0)))
+        (delete-char -1)
+        (when (equal "|"
+                     string-matched)
+          (setf point-to-start-with (point))))
+      (unless (eobp)
+        (forward-char 1)))
+    (goto-char point-to-start-with)))
+
+(defun on-temp-buffer//postprocess-buffer-for-point ()
+  "Process the current buffer so it indicates where point was.
+
+This is for use after running body, for on-temp-buffer-point.
+
+To do this:
+
+1. Place a backslash before each pipe character.
+2. Insert a single pipe character where point was when this function
+was called."
+  (let ((point-to-return (point)))
+         (goto-char (point-min))
+         (while (search-forward "|" nil t)
+           (when (< (point) point-to-return)
+             ;;we're going to insert a character before point-to-return, so increase it by one.
+             (setf point-to-return (1+ point-to-return)))
+           (backward-char 1)
+           (insert "\\")
+           (forward-char))
+         (goto-char point-to-return)
+         (insert "|")))
+
 ;;camelcase tests
 ;;region tests
 (ert-deftest camelcase-region/no-change ()
