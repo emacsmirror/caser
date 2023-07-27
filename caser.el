@@ -16,7 +16,7 @@ to camelcase ARG words."
   (if (use-region-p)
       (caser/camelcase-region (region-beginning) (region-end))
     (caser/camelcase-word arg)))
-(defalias caser-camelcase-dwim caser/camelcase-dwim)
+(defalias 'caser-camelcase-dwim #'caser/camelcase-dwim)
 
 (defun caser/camelcase-region (region-beginning region-end)
   "Camelcase the region between REGION-BEGINNING and REGION-END.
@@ -41,13 +41,13 @@ to camelcase ARG words."
         (caser/upcase-char)))
 
     (goto-char (marker-position end-marker))))
-(defalias caser-camelcase-region caser/camelcase-region)
+(defalias 'caser-camelcase-region #'caser/camelcase-region)
 
 (defun caser/upcase-char ()
   "Upcase the char at point."
   (upcase-region (point)
                  (1+ (point))))
-(defalias caser-upcase-char caser/upcase-char)
+(defalias 'caser-upcase-char #'caser/upcase-char)
 
 (defun caser//forward-word (number-of-words)
   "Move forward NUMBER-OF-WORDS words, defaulting to 1.
@@ -71,7 +71,7 @@ cares about are whitespace."
       (goto-char (match-beginning 0))
       (when (looking-at (rx (one-or-more space)))
         (goto-char (match-end 0))))))
-(defalias caser--forward-word caser//forward-word)
+(defalias 'caser--forward-word #'caser//forward-word)
 
 (defun caser/camelcase-word (&optional words)
   "Camelcase WORDS words forward from point."
@@ -84,7 +84,7 @@ cares about are whitespace."
                              (match-end 0))))
     (goto-char ending-point)
     (caser/camelcase-region starting-point ending-point)))
-(defalias caser-camelcase-word caser/camelcase-word)
+(defalias 'caser-camelcase-word #'caser/camelcase-word)
 
 (defun caser/snakecase-dwim (arg)
   "Snakecase words in the region, if active; if not, snakecase word at point.
@@ -98,7 +98,7 @@ to snakecase ARG words."
   (if (use-region-p)
       (caser/snakecase-region (region-beginning) (region-end))
     (caser/snakecase-word arg)))
-(defalias caser-snakecase-dwim caser/snakecase-dwim)
+(defalias 'caser-snakecase-dwim #'caser/snakecase-dwim)
 
 (defun caser/snakecase-region (region-beginning region-end)
   "Snakecase the region between REGION-BEGINNING and REGION-END.
@@ -141,7 +141,7 @@ to snakecase ARG words."
           ;;dashcase
           (replace-match "_" nil nil nil 3))))
     (goto-char (marker-position end-marker))))
-(defalias caser-snakecase-region caser/snakecase-region)
+(defalias 'caser-snakecase-region #'caser/snakecase-region)
 
 (defun caser/snakecase-word (words)
   "Snakecase WORDS words forward from point."
@@ -149,7 +149,7 @@ to snakecase ARG words."
   (caser/snakecase-region (point)
                           (progn (caser//forward-word words)
                                  (point))))
-(defalias caser-snakecase-word caser/snakecase-word)
+(defalias 'caser-snakecase-word #'caser/snakecase-word)
 
 (defun caser/dashcase-word (words)
   "Dashcase WORDS words forward from point."
@@ -157,7 +157,7 @@ to snakecase ARG words."
   (caser/dashcase-region (point)
                    (progn (caser//forward-word words)
                           (point))))
-(defalias caser-dashcase-word caser/dashcase-word)
+(defalias 'caser-dashcase-word #'caser/dashcase-word)
 
 (defun caser/dashcase-region (region-beginning region-end)
   "Dashcase the region between REGION-BEGINNING and REGION-END.
@@ -200,7 +200,7 @@ to snakecase ARG words."
           ;;dashcase
           (replace-match "-" nil nil nil 3))))
     (goto-char (marker-position end-marker))))
-(defalias caser-dashcase-region caser/dashcase-region)
+(defalias 'caser-dashcase-region #'caser/dashcase-region)
 
 (defun caser/dashcase-dwim (arg)
   "Dashcase words in the region, if active; if not, dashcase word at point.
@@ -214,7 +214,7 @@ to dashcase ARG words."
   (if (use-region-p)
       (caser/dashcase-region (region-beginning) (region-end))
     (caser/dashcase-word arg)))
-(defalias caser-dashcase-dwim caser/dashcase-dwim)
+(defalias 'caser-dashcase-dwim #'caser/dashcase-dwim)
 
 ;;suggested.
 ;; (bind-key "M-C" #'caser/camelcase-dwim)
