@@ -93,19 +93,19 @@ was called."
   (should (equal "hi|"
                  (on-temp-buffer-point
                    "hi"
-                   (camelcase-region 1 3)))))
+                   (caser/camelcase-region 1 3)))))
 
 (ert-deftest camelcase-region/from-snakecase/one-word ()
   (should (equal "hiMom|"
                  (on-temp-buffer-point
                    "hi_mom"
-                   (camelcase-region 1 7)))))
+                   (caser/camelcase-region 1 7)))))
 
 (ert-deftest camelcase-region/from-dashcase/one-word ()
   (should (equal "hiMom|"
                  (on-temp-buffer-point
                    "hi-mom"
-                   (camelcase-region 1 7)))))
+                   (caser/camelcase-region 1 7)))))
 
 ;;word tests
 (ert-deftest camelcase-word/from-snakecase ()
@@ -138,31 +138,31 @@ was called."
   (should (equal "hi"
                  (on-temp-buffer
                    "hi"
-                   (camelcase-dwim 1)))))
+                   (caser/camelcase-dwim 1)))))
 
 (ert-deftest camelcase-dwim/from-snakecase ()
   (should (equal "hiMom|"
                  (on-temp-buffer-point
                    "hi_mom"
-                   (camelcase-dwim 1)))))
+                   (caser/camelcase-dwim 1)))))
 
 (ert-deftest camelcase-dwim/from-dashcase ()
   (should (equal "hiMom|"
                  (on-temp-buffer-point
                    "hi-mom"
-                   (camelcase-dwim 1)))))
+                   (caser/camelcase-dwim 1)))))
 
 (ert-deftest camelcase-dwim/snakecase-two-arg ()
   (should (equal "hiMom andOther| stuff_here"
                  (on-temp-buffer-point
                    "hi_mom and_other stuff_here"
-                   (camelcase-dwim 2)))))
+                   (caser/camelcase-dwim 2)))))
 
 (ert-deftest camelcase-dwim/snakecase-three-arg-complicated-words ()
   (should (equal "hiThere thisIsWayFun youGuys| and_more"
                  (on-temp-buffer-point
                    "|hi_there this_is_way_fun you_guys and_more"
-                   (camelcase-dwim 3)))))
+                   (caser/camelcase-dwim 3)))))
 
 ;;snakecase_tests
 ;;region tests
