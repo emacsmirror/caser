@@ -1,4 +1,9 @@
-;;; caser.el -- Change the casing of text, from camelCase to dash-case to snake_case. -*- lexical-binding: t; -*-
+;;; caser.el --- Change text casing from camelCase to dash-case to snake_case -*- lexical-binding: t; -*-
+
+;; Version: 0.1
+;; Homepage: https://hg.sr.ht/~zck/caser.el
+
+;; Package-Requires: ((emacs "24.1"))
 
 ;;; Commentary:
 
