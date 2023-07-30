@@ -1,3 +1,5 @@
+(require 'caser)
+
 (defmacro caser//on-temp-buffer (string &rest body)
   "Insert STRING into a temp buffer, then run BODY on the temp buffer.
 
