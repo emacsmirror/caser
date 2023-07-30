@@ -49,7 +49,9 @@ occurs.  To insert an actual pipe, include two pipes."
 
 
 (defun caser//on-temp-buffer//preprocess-buffer ()
-  "Preprocess the current buffer for caser//on-temp-buffer before body code can run.
+  "Preprocess the current buffer for caser//on-temp-buffer.
+
+This should be run before running any body code for caser//on-temp-buffer
 
 To do this:
 
