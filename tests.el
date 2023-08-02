@@ -168,6 +168,12 @@ was called."
                    "|hi_there this_is_way_fun you_guys and_more"
                    (caser/camelcase-dwim 3)))))
 
+(ert-deftest camelcase-dwim/moves-to-beginning-of-word ()
+  (should (equal "hi_mom andOther| stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom and_ot|her stuff_here"
+                   (caser/camelcase-dwim 1)))))
+
 ;;snakecase_tests
 ;;region tests
 (ert-deftest snakecase-region/no-change ()
@@ -249,6 +255,13 @@ was called."
                  (caser//on-temp-buffer-point
                    "hiMom andOther stuffHere"
                    (caser/snakecase-dwim 2)))))
+
+(ert-deftest snakecase-dwim/moves-to-beginning-of-word ()
+  (should (equal "hi-mom and_other| stuff-here"
+                 (caser//on-temp-buffer-point
+                   "hi-mom and-ot|her stuff-here"
+                   (caser/snakecase-dwim 1)))))
+
 ;;dashcase-tests
 ;; region tests
 (ert-deftest dashcase-region/no-change ()
@@ -331,6 +344,12 @@ was called."
                  (caser//on-temp-buffer-point
                    "hiMom andOther stuffHere"
                    (caser/dashcase-dwim 2)))))
+
+(ert-deftest dashcase-dwim/moves-to-beginning-of-word ()
+  (should (equal "hiMom and-other| stuffHere"
+                 (caser//on-temp-buffer-point
+                   "hiMom andOt|her stuffHere"
+                   (caser/dashcase-dwim 1)))))
 
 ;;forward-word
 (ert-deftest forward-word/all-lowercase ()

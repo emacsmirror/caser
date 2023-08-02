@@ -24,6 +24,15 @@
 
 ;;; Code:
 
+(defun caser//move-to-beginning-of-word ()
+  "Move to the beginning of the word point is in."
+  (while (looking-back (rx (one-or-more (or word
+                                            "-"
+                                            "_")))
+                       (point-min)
+                       t)
+    (goto-char (match-beginning 0))))
+
 (defun caser/camelcase-dwim (arg)
   "Camelcase words in the region, if active; if not, camelcase word at point.
 
@@ -35,7 +44,8 @@ to camelcase ARG words."
   (interactive "*p")
   (if (use-region-p)
       (caser/camelcase-region (region-beginning) (region-end))
-    (caser/camelcase-word arg)))
+    (progn (caser//move-to-beginning-of-word)
+           (caser/camelcase-word arg))))
 (defalias 'caser-camelcase-dwim #'caser/camelcase-dwim)
 
 (defun caser/camelcase-region (region-beginning region-end)
@@ -117,7 +127,8 @@ to snakecase ARG words."
   (interactive "*p")
   (if (use-region-p)
       (caser/snakecase-region (region-beginning) (region-end))
-    (caser/snakecase-word arg)))
+    (progn (caser//move-to-beginning-of-word)
+           (caser/snakecase-word arg))))
 (defalias 'caser-snakecase-dwim #'caser/snakecase-dwim)
 
 (defun caser/snakecase-region (region-beginning region-end)
@@ -233,7 +244,8 @@ to dashcase ARG words."
   (interactive "*p")
   (if (use-region-p)
       (caser/dashcase-region (region-beginning) (region-end))
-    (caser/dashcase-word arg)))
+    (progn (caser//move-to-beginning-of-word)
+           (caser/dashcase-word arg))))
 (defalias 'caser-dashcase-dwim #'caser/dashcase-dwim)
 
 ;;suggested.
