@@ -35,8 +35,7 @@ to camelcase ARG words."
   (interactive "*p")
   (if (use-region-p)
       (caser/camelcase-region (region-beginning) (region-end))
-    (progn (caser//move-to-beginning-of-word)
-           (caser/camelcase-word arg))))
+    (caser/camelcase-word arg)))
 (defalias 'caser-camelcase-dwim #'caser/camelcase-dwim)
 
 (defun caser/camelcase-region (region-beginning region-end)
@@ -113,7 +112,10 @@ cares about are whitespace."
 (defun caser/camelcase-word (&optional words)
   "Camelcase WORDS words forward from point."
   (interactive "p")
-  (if (> words 0)
+  (if (and (> words 0)
+           (looking-at (rx (or word
+                               "-"
+                               "_"))))
       (caser//move-to-beginning-of-word)
     (caser//move-to-end-of-word))
   (let* ((initial-bound (point))
