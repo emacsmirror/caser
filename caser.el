@@ -24,15 +24,6 @@
 
 ;;; Code:
 
-(defun caser//move-to-beginning-of-word ()
-  "Move to the beginning of the word point is in."
-  (while (looking-back (rx (one-or-more (or word
-                                            "-"
-                                            "_")))
-                       (point-min)
-                       t)
-    (goto-char (match-beginning 0))))
-
 (defun caser/camelcase-dwim (arg)
   "Camelcase words in the region, if active; if not, camelcase word at point.
 
@@ -79,6 +70,22 @@ to camelcase ARG words."
                  (1+ (point))))
 (defalias 'caser-upcase-char #'caser/upcase-char)
 
+(defun caser//move-to-beginning-of-word ()
+  "Move to the beginning of the word point is in."
+  (while (looking-back (rx (one-or-more (or word
+                                            "-"
+                                            "_")))
+                       (point-min)
+                       t)
+    (goto-char (match-beginning 0))))
+
+(defun caser//move-to-end-of-word ()
+  "Move to the beginning of the word point is in."
+  (when (looking-at (rx (one-or-more (or word
+                                         "-"
+                                         "_"))))
+    (goto-char (match-end 0))))
+
 (defun caser//forward-word (number-of-words)
   "Move forward NUMBER-OF-WORDS words, defaulting to 1.
 
@@ -106,14 +113,17 @@ cares about are whitespace."
 (defun caser/camelcase-word (&optional words)
   "Camelcase WORDS words forward from point."
   (interactive "p")
-  (let ((starting-point (point))
-        (ending-point (progn (looking-at (rx-to-string
-                                          `(repeat 0 ,(or words 1)
-                                                   (seq (zero-or-more blank)
-                                                        (one-or-more (not space))))))
-                             (match-end 0))))
-    (goto-char ending-point)
-    (caser/camelcase-region starting-point ending-point)))
+  (if (> words 0)
+      (caser//move-to-beginning-of-word)
+    (caser//move-to-end-of-word))
+  (let* ((initial-bound (point))
+         (other-bound (progn (caser//forward-word words) (point)))
+         (starting-point (min initial-bound other-bound))
+         (ending-point (max initial-bound other-bound))
+         (marker (make-marker)))
+    (move-marker marker other-bound)
+    (caser/camelcase-region starting-point ending-point)
+    (goto-char (marker-position marker))))
 (defalias 'caser-camelcase-word #'caser/camelcase-word)
 
 (defun caser/snakecase-dwim (arg)

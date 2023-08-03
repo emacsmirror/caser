@@ -136,6 +136,12 @@ was called."
                    "hi_mom and-other stuff_here"
                    (caser/camelcase-word 2)))))
 
+(ert-deftest camelcase-word/backwards-one-word ()
+  (should (equal "hi_mom |andOther stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom and_other| stuff_here"
+                   (caser/camelcase-word -1)))))
+
 
 ;;dwim tests
 (ert-deftest camelcase-dwim/single-word-doesnt-change ()
@@ -143,6 +149,12 @@ was called."
                  (caser//on-temp-buffer
                    "hi"
                    (caser/camelcase-dwim 1)))))
+
+(ert-deftest camelcase-dwim/backward-single-word-doesnt-change ()
+  (should (equal "|hi"
+                 (caser//on-temp-buffer-point
+                   "hi|"
+                   (caser/camelcase-dwim -1)))))
 
 (ert-deftest camelcase-dwim/from-snakecase ()
   (should (equal "hiMom|"
@@ -173,6 +185,12 @@ was called."
                  (caser//on-temp-buffer-point
                    "hi_mom and_ot|her stuff_here"
                    (caser/camelcase-dwim 1)))))
+
+(ert-deftest camelcase-dwim/backward-moves-to-end-of-word ()
+  (should (equal "hi_mom |andOther stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom an|d_other stuff_here"
+                   (caser/camelcase-dwim -1)))))
 
 ;;snakecase_tests
 ;;region tests
