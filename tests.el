@@ -142,7 +142,6 @@ was called."
                    "hi_mom and_other| stuff_here"
                    (caser/camelcase-word -1)))))
 
-
 (ert-deftest camelcase-word/starting-at-end-of-word-still-moves-forward ()
     (should (equal "hi_mom andOther| stuff_here"
                    (caser//on-temp-buffer-point
@@ -262,12 +261,30 @@ was called."
                    "hiMom and-other stuff_here"
                    (caser/snakecase-word 2)))))
 
+(ert-deftest snakecase-word/backwards-one-word ()
+  (should (equal "hi-mom |and_other stuffHere"
+                 (caser//on-temp-buffer-point
+                   "hi-mom and-other| stuffHere"
+                   (caser/snakecase-word -1)))))
+
+(ert-deftest snakecase-word/starting-at-end-of-word-still-moves-forward ()
+    (should (equal "hi-mom and_other| stuffHere"
+                   (caser//on-temp-buffer-point
+                     "hi-mom| andOther stuffHere"
+                     (caser/snakecase-word 1)))))
+
 ;;dwim tests
 (ert-deftest snakecase-dwim/single-word-doesnt-change ()
   (should (equal "hi"
                  (caser//on-temp-buffer
                    "hi"
                    (caser/snakecase-dwim 1)))))
+
+(ert-deftest snakecase-dwim/backward-single-word-doesnt-change ()
+  (should (equal "|hi"
+                 (caser//on-temp-buffer-point
+                   "hi|"
+                   (caser/snakecase-dwim -1)))))
 
 (ert-deftest snakecase-dwim/from-camelcase ()
   (should (equal "hi_mom|"
@@ -292,6 +309,18 @@ was called."
                  (caser//on-temp-buffer-point
                    "hi-mom and-ot|her stuff-here"
                    (caser/snakecase-dwim 1)))))
+
+(ert-deftest snakecase-dwim/backward-moves-to-end-of-word ()
+  (should (equal "hi-mom |and_other stuffHere"
+                 (caser//on-temp-buffer-point
+                   "hi-mom an|dOther stuffHere"
+                   (caser/snakecase-dwim -1)))))
+
+(ert-deftest snakecase-dwim/starting-at-end-of-word-still-moves-forward ()
+    (should (equal "hiMom and_other| stuff-here"
+                   (caser//on-temp-buffer-point
+                     "hiMom| and-other stuff-here"
+                     (caser/snakecase-dwim 1)))))
 
 ;;dashcase-tests
 ;; region tests
@@ -350,6 +379,17 @@ was called."
                    "hiMom and_other stuff_here"
                    (caser/dashcase-word 2)))))
 
+(ert-deftest dashcase-word/backwards-one-word ()
+  (should (equal "hi_mom |and-other stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom and_other| stuff_here"
+                   (caser/dashcase-word -1)))))
+
+(ert-deftest dashcase-word/starting-at-end-of-word-still-moves-forward ()
+    (should (equal "hi_mom and-other| stuff_here"
+                   (caser//on-temp-buffer-point
+                     "hi_mom| and_other stuff_here"
+                     (caser/dashcase-word 1)))))
 
 ;; dwim tests
 (ert-deftest dashcase-dwim/single-word-doesnt-change ()
@@ -357,6 +397,12 @@ was called."
                  (caser//on-temp-buffer
                    "hi"
                    (caser/dashcase-dwim 1)))))
+
+(ert-deftest dashcase-dwim/backward-single-word-doesnt-change ()
+  (should (equal "|hi"
+                 (caser//on-temp-buffer-point
+                   "hi|"
+                   (caser/dashcase-dwim -1)))))
 
 (ert-deftest dashcase-dwim/from-camelcase ()
   (should (equal "hi-mom|"
@@ -381,6 +427,18 @@ was called."
                  (caser//on-temp-buffer-point
                    "hiMom andOt|her stuffHere"
                    (caser/dashcase-dwim 1)))))
+
+(ert-deftest dashcase-dwim/backward-moves-to-end-of-word ()
+  (should (equal "hi_mom |and-other stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom an|dOther stuff_here"
+                   (caser/dashcase-dwim -1)))))
+
+(ert-deftest dashcase-dwim/starting-at-end-of-word-still-moves-forward ()
+    (should (equal "hi_mom and-other| stuff_here"
+                   (caser//on-temp-buffer-point
+                     "hi_mom| and_other stuff_here"
+                     (caser/dashcase-dwim 1)))))
 
 ;;forward-word
 (ert-deftest forward-word/all-lowercase ()

@@ -139,8 +139,7 @@ to snakecase ARG words."
   (interactive "*p")
   (if (use-region-p)
       (caser/snakecase-region (region-beginning) (region-end))
-    (progn (caser//move-to-beginning-of-word)
-           (caser/snakecase-word arg))))
+    (caser/snakecase-word arg)))
 (defalias 'caser-snakecase-dwim #'caser/snakecase-dwim)
 
 (defun caser/snakecase-region (region-beginning region-end)
@@ -189,17 +188,39 @@ to snakecase ARG words."
 (defun caser/snakecase-word (words)
   "Snakecase WORDS words forward from point."
   (interactive "p")
-  (caser/snakecase-region (point)
-                          (progn (caser//forward-word words)
-                                 (point))))
+  (if (and (> words 0)
+           (looking-at (rx (or word
+                               "-"
+                               "_"))))
+      (caser//move-to-beginning-of-word)
+    (caser//move-to-end-of-word))
+  (let* ((initial-bound (point))
+         (other-bound (progn (caser//forward-word words) (point)))
+         (starting-point (min initial-bound other-bound))
+         (ending-point (max initial-bound other-bound))
+         (marker (make-marker)))
+    (move-marker marker other-bound)
+    (caser/snakecase-region starting-point ending-point)
+    (goto-char (marker-position marker))))
 (defalias 'caser-snakecase-word #'caser/snakecase-word)
 
 (defun caser/dashcase-word (words)
   "Dashcase WORDS words forward from point."
   (interactive "p")
-  (caser/dashcase-region (point)
-                   (progn (caser//forward-word words)
-                          (point))))
+  (if (and (> words 0)
+           (looking-at (rx (or word
+                               "-"
+                               "_"))))
+      (caser//move-to-beginning-of-word)
+    (caser//move-to-end-of-word))
+  (let* ((initial-bound (point))
+         (other-bound (progn (caser//forward-word words) (point)))
+         (starting-point (min initial-bound other-bound))
+         (ending-point (max initial-bound other-bound))
+         (marker (make-marker)))
+    (move-marker marker other-bound)
+    (caser/dashcase-region starting-point ending-point)
+    (goto-char (marker-position marker))))
 (defalias 'caser-dashcase-word #'caser/dashcase-word)
 
 (defun caser/dashcase-region (region-beginning region-end)
@@ -256,8 +277,7 @@ to dashcase ARG words."
   (interactive "*p")
   (if (use-region-p)
       (caser/dashcase-region (region-beginning) (region-end))
-    (progn (caser//move-to-beginning-of-word)
-           (caser/dashcase-word arg))))
+    (caser/dashcase-word arg)))
 (defalias 'caser-dashcase-dwim #'caser/dashcase-dwim)
 
 ;;suggested.
