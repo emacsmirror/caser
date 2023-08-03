@@ -142,14 +142,26 @@ was called."
                    "hi_mom and_other| stuff_here"
                    (caser/camelcase-word -1)))))
 
-(ert-deftest camelcase-word/starting-at-end-of-word-still-moves-forward ()
-    (should (equal "hi_mom andOther| stuff_here"
-                   (caser//on-temp-buffer-point
-                     "hi_mom| and_other stuff_here"
-                     (caser/camelcase-word 1)))))
+(ert-deftest camelcase-word/starting-at-end-of-word/backward ()
+  (should (equal "hi_mom |andOther stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom and_other| stuff_here"
+                   (caser/camelcase-word -1)))))
 
-(ert-deftest camelcase-word/starting-at-start-of-word-still-moves-backward ()
-    (should (equal "hi_mom |andOther stuff_here"
+(ert-deftest camelcase-word/starting-at-end-of-word/forward ()
+  (should (equal "hi_mom andOther| stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom| and-other stuff_here"
+                   (caser/camelcase-word 1)))))
+
+(ert-deftest camelcase-word/starting-at-start-of-word/forward ()
+  (should (equal "hi_mom andOther| stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom |and-other stuff_here"
+                   (caser/camelcase-word 1)))))
+
+(ert-deftest camelcase-word/starting-at-start-of-word/backward ()
+  (should (equal "hi_mom |andOther stuff_here"
                  (caser//on-temp-buffer-point
                    "hi_mom and_other |stuff_here"
                    (caser/camelcase-word -1)))))
@@ -205,10 +217,10 @@ was called."
                    (caser/camelcase-dwim -1)))))
 
 (ert-deftest camelcase-dwim/starting-at-end-of-word-still-moves-forward ()
-    (should (equal "hi_mom andOther| stuff_here"
-                   (caser//on-temp-buffer-point
-                     "hi_mom| and_other stuff_here"
-                     (caser/camelcase-dwim 1)))))
+  (should (equal "hi_mom andOther| stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom| and_other stuff_here"
+                   (caser/camelcase-dwim 1)))))
 
 ;;snakecase_tests
 ;;region tests
@@ -274,15 +286,39 @@ was called."
                    (caser/snakecase-word -1)))))
 
 (ert-deftest snakecase-word/starting-at-end-of-word-still-moves-forward ()
-    (should (equal "hi-mom and_other| stuffHere"
-                   (caser//on-temp-buffer-point
-                     "hi-mom| andOther stuffHere"
-                     (caser/snakecase-word 1)))))
+  (should (equal "hi-mom and_other| stuffHere"
+                 (caser//on-temp-buffer-point
+                   "hi-mom| andOther stuffHere"
+                   (caser/snakecase-word 1)))))
 
 (ert-deftest snakecase-word/starting-at-start-of-word-still-moves-backward ()
-      (should (equal "hi-mom |and_other stuffHere"
+  (should (equal "hi-mom |and_other stuffHere"
                  (caser//on-temp-buffer-point
                    "hi-mom and-other |stuffHere"
+                   (caser/snakecase-word -1)))))
+
+(ert-deftest snakecase-word/starting-at-end-of-word/backward ()
+  (should (equal "hiMom |and_other stuff-here"
+                 (caser//on-temp-buffer-point
+                   "hiMom andOther| stuff-here"
+                   (caser/snakecase-word -1)))))
+
+(ert-deftest snakecase-word/starting-at-end-of-word/forward ()
+  (should (equal "hi-mom and_other| stuff-here"
+                 (caser//on-temp-buffer-point
+                   "hi-mom| and-other stuff-here"
+                   (caser/snakecase-word 1)))))
+
+(ert-deftest snakecase-word/starting-at-start-of-word/forward ()
+  (should (equal "hiMom and_other| stuffHere"
+                 (caser//on-temp-buffer-point
+                   "hiMom |andOther stuffHere"
+                   (caser/snakecase-word 1)))))
+
+(ert-deftest snakecase-word/starting-at-start-of-word/backward ()
+  (should (equal "hi-mom |and_other stuff-here"
+                 (caser//on-temp-buffer-point
+                   "hi-mom and-other |stuff-here"
                    (caser/snakecase-word -1)))))
 
 ;;dwim tests
@@ -329,10 +365,10 @@ was called."
                    (caser/snakecase-dwim -1)))))
 
 (ert-deftest snakecase-dwim/starting-at-end-of-word-still-moves-forward ()
-    (should (equal "hiMom and_other| stuff-here"
-                   (caser//on-temp-buffer-point
-                     "hiMom| and-other stuff-here"
-                     (caser/snakecase-dwim 1)))))
+  (should (equal "hiMom and_other| stuff-here"
+                 (caser//on-temp-buffer-point
+                   "hiMom| and-other stuff-here"
+                   (caser/snakecase-dwim 1)))))
 
 ;;dashcase-tests
 ;; region tests
@@ -397,14 +433,26 @@ was called."
                    "hi_mom and_other| stuff_here"
                    (caser/dashcase-word -1)))))
 
-(ert-deftest dashcase-word/starting-at-end-of-word-still-moves-forward ()
-    (should (equal "hi_mom and-other| stuff_here"
-                   (caser//on-temp-buffer-point
-                     "hi_mom| and_other stuff_here"
-                     (caser/dashcase-word 1)))))
+(ert-deftest dashcase-word/starting-at-end-of-word/backward ()
+  (should (equal "hi_mom |and-other stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom and_other| stuff_here"
+                   (caser/dashcase-word -1)))))
 
-(ert-deftest dashcase-word/starting-at-start-of-word-still-moves-backward ()
-    (should (equal "hi_mom |and-other stuff_here"
+(ert-deftest dashcase-word/starting-at-end-of-word/forward ()
+  (should (equal "hi_mom and-other| stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom| and_other stuff_here"
+                   (caser/dashcase-word 1)))))
+
+(ert-deftest dashcase-word/starting-at-start-of-word/forward ()
+  (should (equal "hi_mom and-other| stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom |and_other stuff_here"
+                   (caser/dashcase-word 1)))))
+
+(ert-deftest dashcase-word/starting-at-start-of-word/backward ()
+  (should (equal "hi_mom |and-other stuff_here"
                  (caser//on-temp-buffer-point
                    "hi_mom and_other |stuff_here"
                    (caser/dashcase-word -1)))))
@@ -453,10 +501,10 @@ was called."
                    (caser/dashcase-dwim -1)))))
 
 (ert-deftest dashcase-dwim/starting-at-end-of-word-still-moves-forward ()
-    (should (equal "hi_mom and-other| stuff_here"
-                   (caser//on-temp-buffer-point
-                     "hi_mom| and_other stuff_here"
-                     (caser/dashcase-dwim 1)))))
+  (should (equal "hi_mom and-other| stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom| and_other stuff_here"
+                   (caser/dashcase-dwim 1)))))
 
 ;;forward-word
 (ert-deftest forward-word/all-lowercase ()

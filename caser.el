@@ -112,12 +112,16 @@ cares about are whitespace."
 (defun caser/camelcase-word (&optional words)
   "Camelcase WORDS words forward from point."
   (interactive "p")
-  (if (and (> words 0)
-           (looking-at (rx (or word
+  (cond ((and (> words 0)
+              (looking-at (rx (or word
+                                  "-"
+                                  "_"))))
+         (caser//move-to-beginning-of-word))
+        ((looking-back (rx (or word
                                "-"
-                               "_"))))
-      (caser//move-to-beginning-of-word)
-    (caser//move-to-end-of-word))
+                               "_"))
+                       (1- (point)))
+         (caser//move-to-end-of-word)))
   (let* ((initial-bound (point))
          (other-bound (progn (caser//forward-word words) (point)))
          (starting-point (min initial-bound other-bound))
@@ -218,7 +222,8 @@ to snakecase ARG words."
          (caser//move-to-beginning-of-word))
         ((looking-back (rx (or word
                                "-"
-                               "_")))
+                               "_"))
+                       (1- (point)))
          (caser//move-to-end-of-word)))
   (let* ((initial-bound (point))
          (other-bound (progn (caser//forward-word words) (point)))
