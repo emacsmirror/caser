@@ -732,10 +732,16 @@ you all"
                    "|hiThere friendsWho areHere"
                    (caser//forward-word 2)))))
 
-(ert-deftest forward-word/two-camelcase ()
+(ert-deftest forward-word/two-dashcase ()
   (should (equal "hi-there friends-who| are-here"
                  (caser//on-temp-buffer-point
                    "|hi-there friends-who are-here"
+                   (caser//forward-word 2)))))
+
+(ert-deftest forward-word/two-snakecase ()
+  (should (equal "hi_there friends_who| are_here"
+                 (caser//on-temp-buffer-point
+                   "|hi_there friends_who are_here"
                    (caser//forward-word 2)))))
 
 (ert-deftest forward-word/one-of-each ()
