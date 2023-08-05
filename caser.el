@@ -109,9 +109,8 @@ cares about are whitespace."
         (goto-char (match-end 0))))))
 (defalias 'caser--forward-word #'caser//forward-word)
 
-(defun caser/camelcase-word (&optional words)
-  "Camelcase WORDS words forward from point."
-  (interactive "p")
+(defun caser//word-helper (words case-function)
+  "Call CASE-FUNCTION on WORDS words."
   (cond ((and (> words 0)
               (looking-at (rx (or word
                                   "-"
@@ -128,8 +127,12 @@ cares about are whitespace."
          (ending-point (max initial-bound other-bound))
          (marker (make-marker)))
     (move-marker marker other-bound)
-    (caser/camelcase-region starting-point ending-point)
+    (funcall case-function starting-point ending-point)
     (goto-char (marker-position marker))))
+
+(defun caser/camelcase-word (words)
+  "Camelcase WORDS words forward from point."
+  (caser//word-helper words #'caser/camelcase-region))
 (defalias 'caser-camelcase-word #'caser/camelcase-word)
 
 (defun caser/snakecase-dwim (arg)
@@ -189,50 +192,14 @@ to snakecase ARG words."
     (goto-char (marker-position end-marker))))
 (defalias 'caser-snakecase-region #'caser/snakecase-region)
 
-(defun caser/snakecase-word (words)
+(defun caser/snakecase-word (&optional words)
   "Snakecase WORDS words forward from point."
-  (interactive "p")
-  (cond ((and (> words 0)
-              (looking-at (rx (or word
-                                  "-"
-                                  "_"))))
-         (caser//move-to-beginning-of-word))
-        ((looking-back (rx (or word
-                               "-"
-                               "_"))
-                       (1- (point)))
-         (caser//move-to-end-of-word)))
-  (let* ((initial-bound (point))
-         (other-bound (progn (caser//forward-word words) (point)))
-         (starting-point (min initial-bound other-bound))
-         (ending-point (max initial-bound other-bound))
-         (marker (make-marker)))
-    (move-marker marker other-bound)
-    (caser/snakecase-region starting-point ending-point)
-    (goto-char (marker-position marker))))
+  (caser//word-helper words #'caser/snakecase-region))
 (defalias 'caser-snakecase-word #'caser/snakecase-word)
 
-(defun caser/dashcase-word (words)
+(defun caser/dashcase-word (&optional words)
   "Dashcase WORDS words forward from point."
-  (interactive "p")
-  (cond ((and (> words 0)
-              (looking-at (rx (or word
-                                  "-"
-                                  "_"))))
-         (caser//move-to-beginning-of-word))
-        ((looking-back (rx (or word
-                               "-"
-                               "_"))
-                       (1- (point)))
-         (caser//move-to-end-of-word)))
-  (let* ((initial-bound (point))
-         (other-bound (progn (caser//forward-word words) (point)))
-         (starting-point (min initial-bound other-bound))
-         (ending-point (max initial-bound other-bound))
-         (marker (make-marker)))
-    (move-marker marker other-bound)
-    (caser/dashcase-region starting-point ending-point)
-    (goto-char (marker-position marker))))
+  (caser//word-helper words #'caser/dashcase-region))
 (defalias 'caser-dashcase-word #'caser/dashcase-word)
 
 (defun caser/dashcase-region (region-beginning region-end)
