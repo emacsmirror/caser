@@ -111,6 +111,18 @@ was called."
                    "hi-mom"
                    (caser/camelcase-region 1 7)))))
 
+(ert-deftest camelcase-region/from-dashcase/caps-in-dashcase ()
+  (should (equal "thisIsNotWrong|"
+                 (caser//on-temp-buffer-point
+                   "this-Is-Not-WRONG"
+                   (caser/camelcase-region (point-min) (point-max))))))
+
+(ert-deftest camelcase-region/from-snakecase/caps-in-snakecase ()
+  (should (equal "thisIsNotWrong|"
+                 (caser//on-temp-buffer-point
+                   "this_Is_Not_WRONG"
+                   (caser/camelcase-region (point-min) (point-max))))))
+
 ;;word tests
 (ert-deftest camelcase-word/from-snakecase ()
   (should (equal "abCd| ef_gh"
@@ -275,6 +287,12 @@ was called."
   (should (equal "my_ip|"
                  (caser//on-temp-buffer-point
                    "myIP"
+                   (caser/snakecase-region (point-min) (point-max))))))
+
+(ert-deftest snakecase-region/from-dashcase/caps-in-dashcase ()
+  (should (equal "this_is_not_wrong|"
+                 (caser//on-temp-buffer-point
+                   "this-Is-Not-WRONG"
                    (caser/snakecase-region (point-min) (point-max))))))
 
 ;;word tests
@@ -453,6 +471,12 @@ was called."
   (should (equal "my-ip|"
                  (caser//on-temp-buffer-point
                    "myIP"
+                   (caser/dashcase-region (point-min) (point-max))))))
+
+(ert-deftest dashcase-region/from-snakecase/caps-in-snakecase ()
+  (should (equal "this-is-not-wrong|"
+                 (caser//on-temp-buffer-point
+                   "this_Is_NOT_Wrong"
                    (caser/dashcase-region (point-min) (point-max))))))
 
 ;; word tests

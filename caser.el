@@ -198,6 +198,7 @@ to snakecase ARG words."
                        (insert "_"))))
           ;;dashcase
           (replace-match "_" nil nil nil 3))))
+    (downcase-region region-beginning (marker-position end-marker))
     (goto-char (marker-position end-marker))))
 (defalias 'caser/snakecase-region #'caser-snakecase-region)
 
@@ -251,6 +252,7 @@ to snakecase ARG words."
                        (insert "-"))))
           ;;dashcase
           (replace-match "-" nil nil nil 3))))
+    (downcase-region region-beginning (marker-position end-marker))
     (goto-char (marker-position end-marker))))
 (defalias 'caser/dashcase-region #'caser-dashcase-region)
 
