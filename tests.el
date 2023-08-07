@@ -166,6 +166,29 @@ was called."
                    "hi_mom and_other |stuff_here"
                    (caser/camelcase-word -1)))))
 
+(ert-deftest camelcase-word/icelandic/from-snakecase ()
+  (should (equal "orðÁÍslensku|"
+                 (caser//on-temp-buffer-point
+                   "|orð_á_íslensku"
+                   (caser/camelcase-word 1)))))
+
+(ert-deftest camelcase-word/icelandic/from-dashcase ()
+  (should (equal "orðÁÍslensku|"
+                 (caser//on-temp-buffer-point
+                   "|orð-á-íslensku"
+                   (caser/camelcase-word 1)))))
+
+(ert-deftest camelcase-word/german/from-snakecase ()
+  (should (equal "deutschIstÄhnlich|"
+                 (caser//on-temp-buffer-point
+                   "|deutsch_ist_ähnlich"
+                   (caser/camelcase-word 1)))))
+
+(ert-deftest camelcase-word/german/from-dashcase ()
+  (should (equal "deutschIstÄhnlich|"
+                 (caser//on-temp-buffer-point
+                   "|deutsch-ist-ähnlich"
+                   (caser/camelcase-word 1)))))
 
 ;;dwim tests
 (ert-deftest camelcase-dwim/single-word-doesnt-change ()
@@ -321,6 +344,36 @@ was called."
                    "hi-mom and-other |stuff-here"
                    (caser/snakecase-word -1)))))
 
+(ert-deftest snakecase-word/icelandic/from-dashcase ()
+  (should (equal "orð_á_íslensku|"
+                 (caser//on-temp-buffer-point
+                   "|orð-á-íslensku"
+                   (caser/snakecase-word 1)))))
+
+(ert-deftest snakecase-word/icelandic/from-camelcase ()
+  (should (equal "orð_á_íslensku|"
+                 (caser//on-temp-buffer-point
+                   "|orðÁÍslensku"
+                   (caser/snakecase-word 1)))))
+
+(ert-deftest snakecase-word/german/from-dashcase ()
+  (should (equal "deutsch_ist_ähnlich|"
+                 (caser//on-temp-buffer-point
+                   "|deutsch-ist-ähnlich"
+                   (caser/snakecase-word 1)))))
+
+(ert-deftest snakecase-word/german/from-camelcase ()
+  (should (equal "deutsch_ist_ähnlich|"
+                 (caser//on-temp-buffer-point
+                   "|deutschIstÄhnlich"
+                   (caser/snakecase-word 1)))))
+
+(ert-deftest snakecase-word/korean/from-dashcase ()
+  (should (equal "한국어_단어|"
+                 (caser//on-temp-buffer-point
+                   "|한국어-단어"
+                   (caser/snakecase-word 1)))))
+
 ;;dwim tests
 (ert-deftest snakecase-dwim/single-word-doesnt-change ()
   (should (equal "hi"
@@ -456,6 +509,36 @@ was called."
                  (caser//on-temp-buffer-point
                    "hi_mom and_other |stuff_here"
                    (caser/dashcase-word -1)))))
+
+(ert-deftest dashcase-word/icelandic/from-snakecase ()
+  (should (equal "orð-á-íslensku|"
+                 (caser//on-temp-buffer-point
+                   "|orð_á_íslensku"
+                   (caser/dashcase-word 1)))))
+
+(ert-deftest dashcase-word/icelandic/from-camelcase ()
+  (should (equal "orð-á-íslensku|"
+                 (caser//on-temp-buffer-point
+                   "|orðÁÍslensku"
+                   (caser/dashcase-word 1)))))
+
+(ert-deftest dashcase-word/german/from-snakecase ()
+  (should (equal "deutsch-ist-ähnlich|"
+                 (caser//on-temp-buffer-point
+                   "|deutsch_ist_ähnlich"
+                   (caser/dashcase-word 1)))))
+
+(ert-deftest dashcase-word/german/from-camelcase ()
+  (should (equal "deutsch-ist-ähnlich|"
+                 (caser//on-temp-buffer-point
+                   "|deutschIstÄhnlich"
+                   (caser/dashcase-word 1)))))
+
+(ert-deftest dashcase-word/korean/from-snakecase ()
+  (should (equal "한국어-단어|"
+                 (caser//on-temp-buffer-point
+                   "|한국어_단어"
+                   (caser/dashcase-word 1)))))
 
 ;; dwim tests
 (ert-deftest dashcase-dwim/single-word-doesnt-change ()
