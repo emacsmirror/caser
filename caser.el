@@ -139,6 +139,51 @@ cares about are whitespace."
     (goto-char (marker-position marker))))
 (defalias 'caser//word-helper #'caser--word-helper)
 
+(defun caser--region-helper-for-separator-case (region-beginning region-end separator-to-add separators-to-remove upcase-downcase-region-function)
+  "Act on the region between REGION-BEGINNING and REGION-END.
+
+  This removes SEPARATORS-TO-REMOVE, and replaces them with SEPARATOR-TO-ADD.
+
+At the end, this calls UPCASE-DOWNCASE-REGION-FUNCTION on the region."
+  (goto-char region-beginning)
+  (let ((end-marker (make-marker))
+        (case-fold-search nil))
+    (move-marker end-marker region-end)
+
+    ;;We want insertions before the marker, not after.
+    ;;This prevents the marker being not at the end of a word we've already snakecased,
+    ;;if the word ends with capital letters. (e.g., myIP)
+    (set-marker-insertion-type end-marker t)
+
+    (goto-char region-beginning)
+
+    (while (re-search-forward (rx-to-string `(or (seq (group lower) ;;camelCase is groups 1 & 2
+                                                      (group upper))
+                                                 (seq (group (one-or-more (or ,@separators-to-remove))) ;;dash-case is groups 3 & 4
+                                                      (group word))))
+                              (marker-position end-marker)
+                              t)
+      (let ((matched-camelcase (match-string 1)))
+        (if matched-camelcase
+            (progn (replace-match (concat separator-to-add
+                                          (downcase (match-string 2)))
+                                  t nil nil 2)
+                   (when (looking-at (rx upper))
+                     ;;there is more than one uppercase letter in a row, so we're looking at an acronym.
+                     (while (looking-at (rx upper))
+                       (downcase-region (point)
+                                        (1+ (point)))
+                       (forward-char 1))
+                     (unless (= (point)
+                                (marker-position end-marker))
+                       (backward-char 1)
+                       (insert separator-to-add))))
+          ;;dashcase
+          (replace-match separator-to-add nil nil nil 3))))
+    (funcall upcase-downcase-region-function region-beginning (marker-position end-marker))
+    (goto-char (marker-position end-marker))))
+(defalias 'caser//region-helper-for-separator-case #'caser--region-helper-for-separator-case)
+
 (defun caser-camelcase-word (words)
   "Camelcase WORDS words forward from point."
   (caser//word-helper words #'caser/camelcase-region))
@@ -163,43 +208,11 @@ to snakecase ARG words."
 
   This converts it from camelCase or dash-case to snake_case."
   (interactive "*r")
-  (goto-char region-beginning)
-  (let ((end-marker (make-marker))
-        (case-fold-search nil))
-    (move-marker end-marker region-end)
-
-    ;;We want insertions before the marker, not after.
-    ;;This prevents the marker being not at the end of a word we've already snakecased,
-    ;;if the word ends with capital letters. (e.g., myIP)
-    (set-marker-insertion-type end-marker t)
-
-    (goto-char region-beginning)
-
-    (while (re-search-forward (rx (or (seq (group lower) ;;camelCase is groups 1 & 2
-                                           (group upper))
-                                      (seq (group (one-or-more "-")) ;;dash-case is groups 3 & 4
-                                           (group word))))
-                              (marker-position end-marker)
-                              t)
-      (let ((matched-camelcase (match-string 1)))
-        (if matched-camelcase
-            (progn (replace-match (concat "_"
-                                          (downcase (match-string 2)))
-                                  t nil nil 2)
-                   (when (looking-at (rx upper))
-                     ;;there is more than one uppercase letter in a row, so we're looking at an acronym.
-                     (while (looking-at (rx upper))
-                       (downcase-region (point)
-                                        (1+ (point)))
-                       (forward-char 1))
-                     (unless (= (point)
-                                (marker-position end-marker))
-                       (backward-char 1)
-                       (insert "_"))))
-          ;;dashcase
-          (replace-match "_" nil nil nil 3))))
-    (downcase-region region-beginning (marker-position end-marker))
-    (goto-char (marker-position end-marker))))
+  (caser//region-helper-for-separator-case region-beginning
+                                           region-end
+                                           "_"
+                                           '("-")
+                                           #'downcase-region))
 (defalias 'caser/snakecase-region #'caser-snakecase-region)
 
 (defun caser-snakecase-word (&optional words)
