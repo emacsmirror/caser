@@ -16,7 +16,7 @@ We recommend binding these functions to relevant keys:
 
 Because this package uses standard Emacs [regexp character classes](https://www.gnu.org/software/emacs/manual/html_node/elisp/Char-Classes.html) and [case conversion functions](https://www.gnu.org/software/emacs/manual/html_node/elisp/Case-Conversion.html), it fully supports changing the case of languages that don't use only ASCII letters. Try `orð á íslensku` (Icelandic), or `Deutsch ist ähnlich` (German).
 
-Although languages with no capitalization can't be camelCased, they can still be changed from dash-case to snake_case: try `한국어-단어` `한글-조선글` (Korean).
+Although languages with no capitalization can't be camelCased, they can still be changed from dash-case to snake_case: try `한국어-단어` (Korean).
 
 ## Functions ##
 
