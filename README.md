@@ -24,3 +24,8 @@ There are two sets of functions. If you don't know which you want, prefer the `*
 
 1. `*-dwim` functions are the most user-friendly. If the region is active, they act on the region. If given a prefix argument, they act on that many words forward (or, if negative, backward). Otherwise, they change the case of the single next word. These functions are `camelcase-dwim`, `dashcase-dwim`, and `snakecase-dwim`.
 2. `*-word` functions don't act on the region. They take an optional prefix argument, and act on that many words. These functions are `camelcase-word`, `dashcase-word`, and `snakecase-word`.
+
+## Alternatives ##
+
+* **[string-inflection.el](https://github.com/akicho8/string-inflection)** -- this package focuses on cycling through different cases of text. Caser has a separate command for each desired case, so no cycling is necessary.
+* **[electric-case.el](https://github.com/zk-phi/electric-case)** -- this package converts what is typed in =dash-case= to =camelCase= or =snake_case=. It dosen't permit ad-hoc case changes.
