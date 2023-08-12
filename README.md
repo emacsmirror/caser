@@ -27,5 +27,7 @@ There are two sets of functions. If you don't know which you want, prefer the `*
 
 ## Alternatives ##
 
+This is not the first casing-related Emacs package. However, it works slightly differently than these existing packages.
+
 * **[string-inflection.el](https://github.com/akicho8/string-inflection)** -- this package focuses on cycling through different cases of text. Caser has a separate command for each desired case, so no cycling is necessary.
 * **[electric-case.el](https://github.com/zk-phi/electric-case)** -- this package converts what is typed in =dash-case= to =camelCase= or =snake_case=. It dosen't permit ad-hoc case changes.
