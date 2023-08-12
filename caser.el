@@ -230,43 +230,11 @@ to snakecase ARG words."
 
   This converts it from camelCase or snake_case to dash-case."
   (interactive "*r")
-  (goto-char region-beginning)
-  (let ((end-marker (make-marker))
-        (case-fold-search nil))
-    (move-marker end-marker region-end)
-
-    ;;We want insertions before the marker, not after.
-    ;;This prevents the marker being not at the end of a word we've already snakecased,
-    ;;if the word ends with capital letters. (e.g., myIP)
-    (set-marker-insertion-type end-marker t)
-
-    (goto-char region-beginning)
-
-    (while (re-search-forward (rx (or (seq (group lower) ;;camelCase is groups 1 & 2
-                                           (group upper))
-                                      (seq (group (one-or-more "_")) ;;snake_case is groups 3 & 4
-                                           (group word))))
-                              (marker-position end-marker)
-                              t)
-      (let ((matched-camelcase (match-string 1)))
-        (if matched-camelcase
-            (progn (replace-match (concat "-"
-                                          (downcase (match-string 2)))
-                                  t nil nil 2)
-                   (when (looking-at (rx upper))
-                     ;;there is more than one uppercase letter in a row, so we're looking at an acronym.
-                     (while (looking-at (rx upper))
-                       (downcase-region (point)
-                                        (1+ (point)))
-                       (forward-char 1))
-                     (unless (= (point)
-                                (marker-position end-marker))
-                       (backward-char 1)
-                       (insert "-"))))
-          ;;dashcase
-          (replace-match "-" nil nil nil 3))))
-    (downcase-region region-beginning (marker-position end-marker))
-    (goto-char (marker-position end-marker))))
+  (caser//region-helper-for-separator-case region-beginning
+                                           region-end
+                                           "-"
+                                           '("_")
+                                           #'downcase-region))
 (defalias 'caser/dashcase-region #'caser-dashcase-region)
 
 (defun caser-dashcase-dwim (arg)
