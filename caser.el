@@ -3,7 +3,7 @@
 ;; Version: 0.1
 ;; Homepage: https://hg.sr.ht/~zck/caser.el
 
-;; Package-Requires: ((emacs "24.1"))
+;; Package-Requires: ((emacs "29.1"))
 
 ;; Copyright 2023 Zachary Kanfer <zkanfer@gmail.com>
 
@@ -30,6 +30,8 @@
 
 ;;; Code:
 
+(require 'keymap)
+
 (defun caser-camelcase-dwim (arg)
   "Camelcase words in the region, if active; if not, camelcase word at point.
 
@@ -43,6 +45,8 @@ to camelcase ARG words."
       (caser/camelcase-region (region-beginning) (region-end))
     (caser/camelcase-word arg)))
 (defalias 'caser/camelcase-dwim #'caser-camelcase-dwim)
+(defvar caser/camelcase-repeat-map (define-keymap "c" #'caser/camelcase-dwim))
+(put #'caser/camelcase-dwim 'repeat-map 'caser/camelcase-repeat-map)
 
 (defun caser-camelcase-region (region-beginning region-end)
   "Camelcase the region between REGION-BEGINNING and REGION-END.
@@ -202,6 +206,8 @@ to snakecase ARG words."
       (caser/snakecase-region (region-beginning) (region-end))
     (caser/snakecase-word arg)))
 (defalias 'caser/snakecase-dwim #'caser-snakecase-dwim)
+(defvar caser/snakecase-repeat-map (define-keymap "s" #'caser/snakecase-dwim))
+(put #'caser/snakecase-dwim 'repeat-map 'caser/snakecase-repeat-map)
 
 (defun caser-snakecase-region (region-beginning region-end)
   "Snakecase the region between REGION-BEGINNING and REGION-END.
@@ -250,6 +256,8 @@ to dashcase ARG words."
       (caser/dashcase-region (region-beginning) (region-end))
     (caser/dashcase-word arg)))
 (defalias 'caser/dashcase-dwim #'caser-dashcase-dwim)
+(defvar caser/dashcase-repeat-map (define-keymap "d" #'caser/dashcase-dwim))
+(put #'caser/dashcase-dwim 'repeat-map 'caser/dashcase-repeat-map)
 
 ;;suggested.
 ;; (bind-key "M-C" #'caser/camelcase-dwim)

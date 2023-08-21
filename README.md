@@ -12,6 +12,20 @@ We recommend binding these functions to relevant keys:
 (bind-key "M-D" #'dashcase-dwim)
 ```
 
+## Repeat case changes ##
+
+Sometimes, it's easier to call a `dwim` function multiple times in a row, rather than select a region first. To make this easier, this mode supports [repeat-mode](https://karthinks.com/software/it-bears-repeating/). Repeat-mode is a way of easily repeating related commands.
+
+To enable it, run this line:
+
+```emacs-lisp
+(repeat-mode 1)
+```
+
+Then, each function is able to be repeated by pressing a single letter. Once you run caser/snakecase-dwim, it can be ran gain with `s`. Similarly, caser/camelcase-dwim can be repeated with `c`; caser/dashcase-dwim can be repeated with `d`.
+
+These keys can be customized; see variables `caser/snakecase-repeat-map`, `caser/camelcase-repeat-map`, and `caser/dashcase-repeat-map`.
+
 ## Non-ASCII Support ##
 
 Because this package uses standard Emacs [regexp character classes](https://www.gnu.org/software/emacs/manual/html_node/elisp/Char-Classes.html) and [case conversion functions](https://www.gnu.org/software/emacs/manual/html_node/elisp/Case-Conversion.html), it fully supports changing the case of languages that don't use only ASCII letters. Try `orð á íslensku` (Icelandic), or `Deutsch ist ähnlich` (German).
