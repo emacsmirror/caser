@@ -7,9 +7,9 @@ This package provides functions which change the case of text -- from `camelCase
 We recommend binding these functions to relevant keys:
 
 ```emacs-lisp
-(bind-key "M-C" #'camelcase-dwim)
-(bind-key "M-S" #'snakecase-dwim)
-(bind-key "M-D" #'dashcase-dwim)
+(bind-key "M-C" #'caser-camelcase-dwim)
+(bind-key "M-S" #'caser-snakecase-dwim)
+(bind-key "M-D" #'caser-dashcase-dwim)
 ```
 
 ## Repeat case changes ##
@@ -22,9 +22,9 @@ To enable it, run this line:
 (repeat-mode 1)
 ```
 
-Then, each function is able to be repeated by pressing a single letter. Once you run caser/snakecase-dwim, it can be ran gain with `s`. Similarly, caser/camelcase-dwim can be repeated with `c`; caser/dashcase-dwim can be repeated with `d`.
+Then, each function is able to be repeated by pressing a single letter. Once you run caser-snakecase-dwim, it can be ran gain with `s`. Similarly, caser-camelcase-dwim can be repeated with `c`; caser-dashcase-dwim can be repeated with `d`.
 
-These keys can be customized; see variables `caser/snakecase-repeat-map`, `caser/camelcase-repeat-map`, and `caser/dashcase-repeat-map`.
+These keys can be customized; see variables `caser-snakecase-repeat-map`, `caser-camelcase-repeat-map`, and `caser-dashcase-repeat-map`.
 
 ## Non-ASCII Support ##
 
