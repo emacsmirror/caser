@@ -1,9 +1,0 @@
-image: nixos/unstable
-packages:
-  - nixos.emacs29
-sources:
-  - hg+https://hg.sr.ht/~zck/caser.el
-tasks:
-  - run-tests: |
-      cd caser.el
-      emacs --batch -l caser.el -l tests.el --eval="(require 'ert)" --eval="(ert-run-tests-batch-and-exit)"
