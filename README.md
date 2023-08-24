@@ -2,6 +2,8 @@
 
 This package provides functions which change the case of text -- from `camelCase` to `dash-case` to `snake_case` and back.
 
+[![builds.sr.ht status](https://builds.sr.ht/~zck/caser.el.svg)](https://builds.sr.ht/~zck/caser.el?)
+
 ## Bindings ##
 
 We recommend binding these functions to relevant keys:
@@ -45,3 +47,7 @@ This is not the first casing-related Emacs package. However, it works slightly d
 
 * **[string-inflection.el](https://github.com/akicho8/string-inflection)** -- this package focuses on cycling through different cases of text. Caser has a separate command for each desired case, so no cycling is necessary.
 * **[electric-case.el](https://github.com/zk-phi/electric-case)** -- this package converts what is typed in =dash-case= to =camelCase= or =snake_case=. It dosen't permit ad-hoc case changes.
+
+## CI
+
+CI is set up at builds.sr.ht. Hopefully [everything is passing](https://builds.sr.ht/~zck/caser.el).
