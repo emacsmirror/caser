@@ -28,6 +28,9 @@
 ;; (bind-key "M-S" #'caser-snakecase-dwim)
 ;; (bind-key "M-D" #'caser-dashcase-dwim)
 
+;; The code is at https://hg.sr.ht/~zck/caser.el
+;; CI is at https://builds.sr.ht/~zck/caser.el
+
 ;;; Code:
 
 (require 'keymap)
