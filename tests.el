@@ -862,3 +862,155 @@ you all"
                  (caser//on-temp-buffer-point
                    "|hi +-_=there friends"
                    (caser--forward-word 2)))))
+
+;; convert-from-whitespace
+(ert-deftest convert-whitespace/no-whitespace ()
+  (should (equal "hi-there"
+                 (caser//on-temp-buffer
+                  "hi-there"
+                  (caser--convert-whitespace (point-min)
+                                             (point-max)
+                                             "-")))))
+
+(ert-deftest convert-whitespace/single-whitespace ()
+  (should (equal "hi-there"
+                 (caser//on-temp-buffer
+                  "hi there"
+                  (caser--convert-whitespace (point-min)
+                                             (point-max)
+                                             "-")))))
+
+(ert-deftest convert-whitespace/duplicate-whitespace ()
+  (should (equal "hi-there"
+                 (caser//on-temp-buffer
+                  "hi    there"
+                  (caser--convert-whitespace (point-min)
+                                             (point-max)
+                                             "-")))))
+
+(ert-deftest convert-whitespace/more-than-one-whitespace ()
+  (should (equal "hi-there-to-you"
+                 (caser//on-temp-buffer
+                  "hi    there to  you"
+                  (caser--convert-whitespace (point-min)
+                                             (point-max)
+                                             "-")))))
+
+(ert-deftest convert-whitespace/obeys-points ()
+  (should (equal "hi  _there_to  you"
+                 (caser//on-temp-buffer
+                  "hi    there to  you"
+                  (caser--convert-whitespace 5
+                                             13
+                                             "_")))))
+
+(ert-deftest convert-whitespace/multiple-whitespace-doesnt-overlap-other-words ()
+  (should (equal "a_b c d e"
+                 (caser//on-temp-buffer
+                  "a          b c d e"
+                  (caser--convert-whitespace 1
+                                             13
+                                             "_")))))
+
+;;dashcase-from-space-dwim tests
+
+(ert-deftest dashcase-from-space-dwim/single-whitespace ()
+  (should (equal "|hi-there"
+                 (caser//on-temp-buffer-point
+                   "|hi there"
+                   (set-mark (point-max))
+                   (activate-mark)
+                   (caser-dashcase-from-space-dwim)))))
+
+(ert-deftest dashcase-from-space-dwim/region-forward/single-whitespace ()
+  (should (equal "|hi-there"
+                 (caser//on-temp-buffer-point
+                   "|hi there"
+                   (set-mark (point-max))
+                   (activate-mark)
+                   (caser-dashcase-from-space-dwim)))))
+
+(ert-deftest dashcase-from-space-dwim/region-backward/lots-of-whitespace ()
+  (should (equal "hi-there|"
+                 (caser//on-temp-buffer-point
+                   "hi    there|"
+                   (set-mark (point-min))
+                   (activate-mark)
+                   (caser-dashcase-from-space-dwim)))))
+
+(ert-deftest dashcase-from-space-dwim/region-backward/middle-of-string ()
+  (should (equal "a    |b-c-d  e"
+                 (caser//on-temp-buffer-point
+                   "a    |b           c   d  e"
+                   (set-mark 23)
+                   (activate-mark)
+                   (caser-dashcase-from-space-dwim)))))
+
+(ert-deftest dashcase-from-space-dwim/positive-argument/1 ()
+  (should (equal "hi| there"
+                 (caser//on-temp-buffer-point
+                   "|hi there"
+                   (caser-dashcase-from-space-dwim 1)))))
+
+(ert-deftest dashcase-from-space-dwim/positive-argument/2 ()
+  (should (equal "hi-there|"
+                 (caser//on-temp-buffer-point
+                   "|hi there"
+                   (caser-dashcase-from-space-dwim 2)))))
+
+
+(ert-deftest dashcase-from-space-dwim/positive-argument/3 ()
+  (should (equal "hi there-to-everybody| around"
+                 (caser//on-temp-buffer-point
+                   "hi |there to   everybody around"
+                   (caser-dashcase-from-space-dwim 3)))))
+
+(ert-deftest dashcase-from-space-dwim/negative-argument/-3 ()
+  (should (equal "hi |there-to-everybody around"
+                 (caser//on-temp-buffer-point
+                   "hi there to everybody| around"
+                   (caser-dashcase-from-space-dwim -3)))))
+
+(ert-deftest dashcase-from-space-dwim/region-forward/space-and-camelcase ()
+  (should (equal "hi there-to-everybody| around"
+                 (caser//on-temp-buffer-point
+                   "hi there toEverybody| around"
+                   (set-mark 5)
+                   (activate-mark)
+                   (caser-dashcase-from-space-dwim)))))
+
+;;snakecase-from-space-dwim tests
+
+(ert-deftest snakecase-from-space-dwim/region-backward/space-and-dashcase ()
+  (should (equal "hi there_to_everybody| around"
+                 (caser//on-temp-buffer-point
+                   "hi there to-everybody| around"
+                   (set-mark 5)
+                   (activate-mark)
+                   (caser-snakecase-from-space-dwim)))))
+
+(ert-deftest snakecase-from-space-dwim/positive-argument ()
+  (should (equal "ok   this is_a_new_thing_that| goes on"
+                 (caser//on-temp-buffer-point
+                   "ok   this |is      a-newThing   that goes on"
+                   (caser-snakecase-from-space-dwim 3)))))
+
+(ert-deftest snakecase-from-space-dwim/region-forward/lots-of-things ()
+  (should (equal "hi |there_to_everybody_i_know_around here"
+                 (caser//on-temp-buffer-point
+                   "hi |there    to-everybodyIKnow    around here"
+                   (set-mark 35)
+                   (activate-mark)
+                   (caser-snakecase-from-space-dwim)))))
+
+;;camelcase-from-space-dwim
+
+(ert-deftest camelcase-from-space-dwim/region-forward/lots-of-things ()
+  (should (equal "this   |isALotOfWordsThat matter"
+                 (caser//on-temp-buffer-point
+                   "this   |is a-lot_of    words      that matter"
+                   (set-mark 34)
+                   (activate-mark)
+                   (caser-camelcase-from-space-dwim)))))
+
+;;; tests.el ends here

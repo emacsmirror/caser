@@ -250,6 +250,85 @@ to dashcase ARG words."
 (defvar caser-dashcase-repeat-map (define-keymap "d" #'caser-dashcase-dwim))
 (put #'caser-dashcase-dwim 'repeat-map 'caser-dashcase-repeat-map)
 
+(defun caser--convert-whitespace (beginning-point end-point string-to-convert-to)
+  "Convert every space to STRING-TO-CONVERT-TO.
+
+This only converts between BEGINNING-POINT and END-POINT."
+  (save-excursion
+    (goto-char beginning-point)
+    (let ((end-marker (make-marker)))
+      (move-marker end-marker end-point)
+      (while (re-search-forward (rx (one-or-more ?\s)) (marker-position end-marker) t)
+        (replace-match string-to-convert-to)))))
+
+(defun caser--from-space-dwim-helper (words region-function)
+  "Helper function for *-from-space-dwim functions.
+
+This cases WORDS words, unless the region is active.
+
+It uses REGION-FUNCTION to case the region."
+  (if (use-region-p)
+      (let ((beginning (region-beginning))
+            (end (region-end))
+            (starting-point-marker (point-marker))
+            (end-marker (make-marker)))
+        (move-marker end-marker end)
+
+        (set-marker-insertion-type starting-point-marker nil)
+        (caser--convert-whitespace beginning
+                                   end
+                                   "-")
+        (funcall region-function beginning (marker-position end-marker))
+        (goto-char starting-point-marker))
+    (let* ((starting-end (point))
+           (other-end (progn (caser--forward-word words)
+                             (point)))
+           (beginning (min starting-end other-end))
+           (end (max starting-end other-end))
+           (end-marker (make-marker))
+           (point-at-end-marker (make-marker)))
+      (set-marker end-marker end)
+      (set-marker point-at-end-marker other-end)
+      (set-marker-insertion-type point-at-end-marker (equal starting-end beginning))
+
+      (caser--convert-whitespace beginning end "-")
+      (funcall region-function beginning (marker-position end-marker))
+
+      (goto-char point-at-end-marker))))
+
+(defun caser-dashcase-from-space-dwim (&optional words)
+  "Dashcase what you mean, including converting spaces to dashes.
+
+If the region is active, dashcase it; otherwise dashcase the word at point.
+
+This converts it from camelCase or snake_case to dash-case.
+
+If the region is active, this function calls `caser-dashcase-region'.
+Otherwise, it calls `caser-dashcase-word', with prefix argument passed to it
+to dashcase WORDS words."
+  (interactive "*p")
+  (caser--from-space-dwim-helper words #'caser-dashcase-region))
+
+(defun caser-snakecase-from-space-dwim (&optional words)
+  "Snakecase what you mean, including converting spaces to underscores.
+
+If the region is active, snakecase it; otherwise snakecase WORDS
+words at point, defaulting to 1.
+
+This converts it from camelCase or dash-case to snake_case."
+  (interactive "*p")
+  (caser--from-space-dwim-helper words #'caser-snakecase-region))
+
+(defun caser-camelcase-from-space-dwim (&optional words)
+  "Camelcase what you mean, including converting spaces to underscores.
+
+If the region is active, camelcase it; otherwise camelcase WORDS
+words at point, defaulting to 1.
+
+This converts it from snake_case or dash-case to camelCase."
+  (interactive "*p")
+  (caser--from-space-dwim-helper words #'caser-camelcase-region))
+
 ;;suggested.
 ;; (bind-key "M-C" #'caser-camelcase-dwim)
 ;; (bind-key "M-S" #'caser-snakecase-dwim)
