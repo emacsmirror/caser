@@ -35,6 +35,7 @@
 
 (require 'keymap)
 
+;;;###autoload
 (defun caser-camelcase-dwim (arg)
   "Camelcase words in the region, if active; if not, camelcase word at point.
 
@@ -187,6 +188,7 @@ At the end, this calls UPCASE-DOWNCASE-REGION-FUNCTION on the region."
   "Camelcase WORDS words forward from point."
   (caser--word-helper words #'caser-camelcase-region))
 
+;;;###autoload
 (defun caser-snakecase-dwim (arg)
   "Snakecase words in the region, if active; if not, snakecase word at point.
 
@@ -233,6 +235,7 @@ to snakecase ARG words."
                                            '("_")
                                            #'downcase-region))
 
+;;;###autoload
 (defun caser-dashcase-dwim (arg)
   "Dashcase words in the region, if active; if not, dashcase word at point.
 
@@ -295,6 +298,7 @@ It uses REGION-FUNCTION to case the region."
 
       (goto-char point-at-end-marker))))
 
+;;;###autoload
 (defun caser-dashcase-from-space-dwim (&optional words)
   "Dashcase what you mean, including converting spaces to dashes.
 
@@ -308,6 +312,7 @@ to dashcase WORDS words."
   (interactive "*p")
   (caser--from-space-dwim-helper words #'caser-dashcase-region))
 
+;;;###autoload
 (defun caser-snakecase-from-space-dwim (&optional words)
   "Snakecase what you mean, including converting spaces to underscores.
 
@@ -318,6 +323,7 @@ This converts it from camelCase or dash-case to snake_case."
   (interactive "*p")
   (caser--from-space-dwim-helper words #'caser-snakecase-region))
 
+;;;###autoload
 (defun caser-camelcase-from-space-dwim (&optional words)
   "Camelcase what you mean, including converting spaces to underscores.
 
