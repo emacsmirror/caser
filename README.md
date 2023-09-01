@@ -54,7 +54,7 @@ Although languages with no capitalization can't be camelCased, they can still be
 
 This is not the first casing-related Emacs package. However, it works slightly differently than these existing packages.
 
-* **[string-inflection.el](https://github.com/akicho8/string-inflection)** -- this package focuses on cycling through different cases of text. Caser has a separate command for each desired case, so no cycling is necessary.
+* **[string-inflection.el](https://github.com/akicho8/string-inflection)** -- this package only supports ASCII characters.
 * **[electric-case.el](https://github.com/zk-phi/electric-case)** -- this package converts what is typed in =dash-case= to =camelCase= or =snake_case=. It dosen't permit ad-hoc case changes.
 
 ## CI
