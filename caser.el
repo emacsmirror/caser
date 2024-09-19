@@ -60,8 +60,6 @@ to camelcase ARG words."
   After returning, point is at the end of the region."
   (interactive "*r")
 
-  (downcase-region region-beginning region-end)
-
   (let ((end-marker (make-marker)))
     (move-marker end-marker region-end)
 

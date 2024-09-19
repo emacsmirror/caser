@@ -99,6 +99,12 @@ was called."
                    "hi"
                    (caser-camelcase-region 1 3)))))
 
+(ert-deftest camelcase-region/already-camelcase ()
+  (should (equal "hiMom|"
+                 (caser//on-temp-buffer-point
+                   "|hiMom"
+                   (caser-camelcase-region 1 6)))))
+
 (ert-deftest camelcase-region/from-snakecase/one-word ()
   (should (equal "hiMom|"
                  (caser//on-temp-buffer-point
@@ -112,13 +118,13 @@ was called."
                    (caser-camelcase-region 1 7)))))
 
 (ert-deftest camelcase-region/from-dashcase/caps-in-dashcase ()
-  (should (equal "thisIsNotWrong|"
+  (should (equal "thisIsNotWRONG|"
                  (caser//on-temp-buffer-point
                    "this-Is-Not-WRONG"
                    (caser-camelcase-region (point-min) (point-max))))))
 
 (ert-deftest camelcase-region/from-snakecase/caps-in-snakecase ()
-  (should (equal "thisIsNotWrong|"
+  (should (equal "thisIsNotWRONG|"
                  (caser//on-temp-buffer-point
                    "this_Is_Not_WRONG"
                    (caser-camelcase-region (point-min) (point-max))))))
@@ -214,6 +220,12 @@ was called."
                  (caser//on-temp-buffer-point
                    "hi|"
                    (caser-camelcase-dwim -1)))))
+
+(ert-deftest camelcase-dwim/already-camelcase ()
+  (should (equal "hiMom|"
+                 (caser//on-temp-buffer-point
+                   "|hiMom"
+                   (caser-camelcase-dwim 1)))))
 
 (ert-deftest camelcase-dwim/from-snakecase ()
   (should (equal "hiMom|"
