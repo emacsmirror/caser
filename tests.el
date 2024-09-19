@@ -1013,4 +1013,11 @@ you all"
                    (activate-mark)
                    (caser-camelcase-from-space-dwim)))))
 
+;;upper-camelcase-region tests
+(ert-deftest upper-camelcase-region/region-forward ()
+  (should (equal "whatever ThisIs IsCool|"
+                 (caser//on-temp-buffer-point
+                   "whatever |this-is is_cool"
+                   (caser-upper-camelcase-region 10 25)))))
+
 ;;; tests.el ends here

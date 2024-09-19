@@ -76,6 +76,30 @@ to camelcase ARG words."
 
     (goto-char (marker-position end-marker))))
 
+(defun caser-upper-camelcase-region (region-beginning region-end)
+  "Upper camelcase the region between REGION-BEGINNING and REGION-END.
+
+  This converts it from snake_case, dash-case, or camelCase to UpperCamelCase.
+
+  After returning, point is at the end of the region."
+  (let ((end-marker (make-marker)))
+    (move-marker end-marker region-end)
+    (goto-char region-beginning)
+    (when (re-search-forward (rx word)
+                             region-end
+                             t)
+      (upcase-char -1))
+    (while (re-search-forward (rx (or "-" "_" space))
+                              (marker-position end-marker)
+                              t)
+      (backward-char 1)
+      (if (looking-at (rx space))
+          (forward-char 1)
+        (replace-match ""))
+      (unless (eolp)
+        (caser-upcase-char)))
+    (goto-char (marker-position end-marker))))
+
 (defun caser-upcase-char ()
   "Upcase the char at point."
   (upcase-region (point)
