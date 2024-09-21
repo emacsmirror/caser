@@ -1025,11 +1025,179 @@ you all"
                    (activate-mark)
                    (caser-camelcase-from-space-dwim)))))
 
+;;upper-camelcase
 ;;upper-camelcase-region tests
 (ert-deftest upper-camelcase-region/region-forward ()
   (should (equal "whatever ThisIs IsCool|"
                  (caser//on-temp-buffer-point
                    "whatever |this-is is_cool"
                    (caser-upper-camelcase-region 10 25)))))
+
+(ert-deftest upper-camelcase-region/one-word ()
+  (should (equal "Hi|"
+                 (caser//on-temp-buffer-point
+                   "hi"
+                   (caser-upper-camelcase-region 1 3)))))
+
+(ert-deftest upper-camelcase-region/already-camelcase ()
+  (should (equal "HiMom|"
+                 (caser//on-temp-buffer-point
+                   "|hiMom"
+                   (caser-upper-camelcase-region 1 6)))))
+
+(ert-deftest upper-camelcase-region/from-snakecase/one-word ()
+  (should (equal "HiMom|"
+                 (caser//on-temp-buffer-point
+                   "hi_mom"
+                   (caser-upper-camelcase-region 1 7)))))
+
+(ert-deftest upper-camelcase-region/from-dashcase/one-word ()
+  (should (equal "HiMom|"
+                 (caser//on-temp-buffer-point
+                   "hi-mom"
+                   (caser-upper-camelcase-region 1 7)))))
+
+(ert-deftest upper-camelcase-region/from-dashcase/caps-in-dashcase ()
+  (should (equal "ThisIsNotWRONG|"
+                 (caser//on-temp-buffer-point
+                   "this-Is-Not-WRONG"
+                   (caser-upper-camelcase-region (point-min) (point-max))))))
+
+(ert-deftest upper-camelcase-region/from-snakecase/caps-in-snakecase ()
+  (should (equal "ThisIsNotWRONG|"
+                 (caser//on-temp-buffer-point
+                   "this_Is_Not_WRONG"
+                   (caser-upper-camelcase-region (point-min) (point-max))))))
+
+
+;;word tests
+(ert-deftest upper-camelcase-word/from-snakecase ()
+  (should (equal "AbCd| ef_gh"
+                 (caser//on-temp-buffer-point
+                   "|ab_cd ef_gh"
+                   (caser-upper-camelcase-word 1)))))
+
+(ert-deftest upper-camelcase-word/from-dashcase ()
+  (should (equal "AbCd| ef-gh"
+                 (caser//on-temp-buffer-point
+                   "|ab-cd ef-gh"
+                   (caser-upper-camelcase-word 1)))))
+
+(ert-deftest upper-camelcase-word/called-twice ()
+  (should (equal "HiMom AndOther| stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom and_other stuff_here"
+                   (caser-upper-camelcase-word 2)))))
+
+(ert-deftest upper-camelcase-word/snakecase-and-lispcase ()
+  (should (equal "HiMom AndOther| stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom and-other stuff_here"
+                   (caser-upper-camelcase-word 2)))))
+
+(ert-deftest upper-camelcase-word/backwards-one-word ()
+  (should (equal "hi_mom |AndOther stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom and_other| stuff_here"
+                   (caser-upper-camelcase-word -1)))))
+
+(ert-deftest upper-camelcase-word/starting-at-end-of-word/backward ()
+  (should (equal "hi_mom |AndOther stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom and_other| stuff_here"
+                   (caser-upper-camelcase-word -1)))))
+
+(ert-deftest upper-camelcase-word/starting-at-end-of-word/forward ()
+  (should (equal "hi_mom AndOther| stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom| and-other stuff_here"
+                   (caser-upper-camelcase-word 1)))))
+
+(ert-deftest upper-camelcase-word/starting-at-start-of-word/forward ()
+  (should (equal "hi_mom AndOther| stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom |and-other stuff_here"
+                   (caser-upper-camelcase-word 1)))))
+
+(ert-deftest upper-camelcase-word/starting-at-start-of-word/backward ()
+  (should (equal "hi_mom |AndOther stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom and_other |stuff_here"
+                   (caser-upper-camelcase-word -1)))))
+
+(ert-deftest upper-camelcase-word/icelandic/from-snakecase ()
+  (should (equal "OrðÁÍslensku|"
+                 (caser//on-temp-buffer-point
+                   "|orð_á_íslensku"
+                   (caser-upper-camelcase-word 1)))))
+
+(ert-deftest upper-camelcase-word/icelandic/from-dashcase ()
+  (should (equal "OrðÁÍslensku|"
+                 (caser//on-temp-buffer-point
+                   "|orð-á-íslensku"
+                   (caser-upper-camelcase-word 1)))))
+
+(ert-deftest upper-camelcase-word/german/from-snakecase ()
+  (should (equal "DeutschIstÄhnlich|"
+                 (caser//on-temp-buffer-point
+                   "|deutsch_ist_ähnlich"
+                   (caser-upper-camelcase-word 1)))))
+
+(ert-deftest upper-camelcase-word/german/from-dashcase ()
+  (should (equal "DeutschIstÄhnlich|"
+                 (caser//on-temp-buffer-point
+                   "|deutsch-ist-ähnlich"
+                   (caser-upper-camelcase-word 1)))))
+
+;; dwim tests
+(ert-deftest upper-camelcase-dwim/single-word ()
+  (should (equal "Hi|"
+                 (caser//on-temp-buffer-point
+                   "|hi"
+                   (caser-upper-camelcase-dwim 1)))))
+
+(ert-deftest upper-camelcase-dwim/backward-single-word ()
+  (should (equal "|Hi"
+                 (caser//on-temp-buffer-point
+                   "hi|"
+                   (caser-upper-camelcase-dwim -1)))))
+
+(ert-deftest upper-camelcase-dwim/from-camelcase ()
+  (should (equal "HiMom|"
+                 (caser//on-temp-buffer-point
+                   "hiMom"
+                   (caser-upper-camelcase-dwim 1)))))
+
+(ert-deftest upper-camelcase-dwim/from-snakecase ()
+  (should (equal "HiMom|"
+                 (caser//on-temp-buffer-point
+                   "hi_mom"
+                   (caser-upper-camelcase-dwim 1)))))
+
+(ert-deftest upper-camelcase-dwim/camelcase-two-arg ()
+  (should (equal "HiMom AndOther| stuffHere"
+                 (caser//on-temp-buffer-point
+                   "hiMom andOther stuffHere"
+                   (caser-upper-camelcase-dwim 2)))))
+
+(ert-deftest upper-camelcase-dwim/moves-to-beginning-of-word ()
+  (should (equal "hiMom AndOther| stuffHere"
+                 (caser//on-temp-buffer-point
+                   "hiMom andOt|her stuffHere"
+                   (caser-upper-camelcase-dwim 1)))))
+
+(ert-deftest upper-camelcase-dwim/backward-moves-to-end-of-word ()
+  (should (equal "hi_mom |AndOther stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom an|dOther stuff_here"
+                   (caser-upper-camelcase-dwim -1)))))
+
+(ert-deftest upper-camelcase-dwim/starting-at-end-of-word-still-moves-forward ()
+  (should (equal "hi_mom AndOther| stuff_here"
+                 (caser//on-temp-buffer-point
+                   "hi_mom| and_other stuff_here"
+                   (caser-upper-camelcase-dwim 1)))))
+
+
 
 ;;; tests.el ends here

@@ -1,6 +1,6 @@
 # Caser.el #
 
-This package provides functions which change the case of text -- from `camelCase` to `dash-case` to `snake_case` and back.
+This package provides functions which change the case of text -- from `camelCase` to `UpperCamelCase` to `dash-case` to `snake_case` and back.
 
 [![builds.sr.ht status](https://builds.sr.ht/~zck/caser.el.svg)](https://builds.sr.ht/~zck/caser.el?)
 
@@ -10,6 +10,7 @@ We recommend binding these functions to relevant keys:
 
 ```emacs-lisp
 (bind-key "M-C" #'caser-camelcase-dwim)
+(bind-key "C-M-c" #'caser-upper-camelcase-dwim)
 (bind-key "M-S" #'caser-snakecase-dwim)
 (bind-key "M-D" #'caser-dashcase-dwim)
 ```
@@ -19,6 +20,7 @@ We recommend binding these functions to relevant keys:
 Put some camelcase, snakecase, or dashcase text into a buffer. Then call one of the functions below.
 
 * `caser-camelcase-dwim` changes text to camelCase
+* `caser-upper-camelcase-dwim` changes text to UpperCamelCase
 * `caser-snakecase-dwim` changes text to snake_case
 * `caser-dashcase-dwim` changes text to dash-case.
 
@@ -40,7 +42,7 @@ To enable it, run this line:
 (repeat-mode 1)
 ```
 
-Then, each function is able to be repeated by pressing a single letter. Once you run caser-snakecase-dwim, it can be ran gain with `s`. Similarly, caser-camelcase-dwim can be repeated with `c`; caser-dashcase-dwim can be repeated with `d`.
+Then, each function is able to be repeated by pressing a single letter. Once you run caser-snakecase-dwim, it can be ran gain with `s`. Similarly, caser-camelcase-dwim can be repeated with `c`; caser-upper-camelcase-dwim can be repeated with `c`; caser-dashcase-dwim can be repeated with `d`.
 
 These keys can be customized; see variables `caser-snakecase-repeat-map`, `caser-camelcase-repeat-map`, and `caser-dashcase-repeat-map`.
 

@@ -25,6 +25,7 @@
 ;; We recommend binding the following keys:
 
 ;; (bind-key "M-C" #'caser-camelcase-dwim)
+;; (bind-key "C-M-c" #'caser-upper-camelcase-dwim)
 ;; (bind-key "M-S" #'caser-snakecase-dwim)
 ;; (bind-key "M-D" #'caser-dashcase-dwim)
 
@@ -74,6 +75,22 @@ to camelcase ARG words."
 
     (goto-char (marker-position end-marker))))
 
+(defun caser-upper-camelcase-dwim (arg)
+  "UpperCamelcase words in the region, if active; if not, word at point.
+
+This converts it from dash-case, snake_case, or camelCase to UpperCamelCase.
+
+If the region is active, this function calls `caser-upper-camelcase-region'.
+Otherwise, it calls `caser-upper-camelcase-word', with prefix argument
+passed to it to UpperCamelcase ARG words."
+  (interactive "*p")
+  (if (use-region-p)
+      (caser-upper-camelcase-region (region-beginning) (region-end))
+    (caser-upper-camelcase-word arg)))
+
+(defvar caser-upper-camelcase-repeat-map (define-keymap "c" #'caser-camelcase-dwim))
+(put #'caser-upper-camelcase-dwim 'repeat-map 'caser-camelcase-repeat-map)
+
 (defun caser-upper-camelcase-region (region-beginning region-end)
   "Upper camelcase the region between REGION-BEGINNING and REGION-END.
 
@@ -94,7 +111,9 @@ to camelcase ARG words."
       (if (looking-at (rx space))
           (forward-char 1)
         (replace-match ""))
-      (unless (eolp)
+      (unless (or (eolp)
+                  (>= (point)
+                      (marker-position end-marker)))
         (caser-upcase-char)))
     (goto-char (marker-position end-marker))))
 
@@ -209,6 +228,10 @@ At the end, this calls UPCASE-DOWNCASE-REGION-FUNCTION on the region."
 (defun caser-camelcase-word (words)
   "Camelcase WORDS words forward from point."
   (caser--word-helper words #'caser-camelcase-region))
+
+(defun caser-upper-camelcase-word (words)
+  "UpperCamelcase WORDS words forward from point."
+  (caser--word-helper words #'caser-upper-camelcase-region))
 
 ;;;###autoload
 (defun caser-snakecase-dwim (arg)
