@@ -1166,7 +1166,7 @@ you all"
   (should (equal "HiThere|"
                  (caser//on-temp-buffer-point
                    "|HiThere"
-                   (caser-dashcase-dwim 1)))))
+                   (caser-upper-camelcase-dwim 1)))))
 
 (ert-deftest upper-camelcase-dwim/backward-single-word ()
   (should (equal "|Hi"
