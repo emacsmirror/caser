@@ -10,7 +10,7 @@ We recommend binding these functions to relevant keys:
 
 ```emacs-lisp
 (bind-key "M-C" #'caser-camelcase-dwim)
-(bind-key "C-M-c" #'caser-upper-camelcase-dwim)
+(bind-key "C-M-C" #'caser-upper-camelcase-dwim)
 (bind-key "M-S" #'caser-snakecase-dwim)
 (bind-key "M-D" #'caser-dashcase-dwim)
 ```
