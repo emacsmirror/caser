@@ -88,8 +88,8 @@ passed to it to UpperCamelcase ARG words."
       (caser-upper-camelcase-region (region-beginning) (region-end))
     (caser-upper-camelcase-word arg)))
 
-(defvar caser-upper-camelcase-repeat-map (define-keymap "c" #'caser-camelcase-dwim))
-(put #'caser-upper-camelcase-dwim 'repeat-map 'caser-camelcase-repeat-map)
+(defvar caser-upper-camelcase-repeat-map (define-keymap "c" #'caser-upper-camelcase-dwim))
+(put #'caser-upper-camelcase-dwim 'repeat-map 'caser-upper-camelcase-repeat-map)
 
 (defun caser-upper-camelcase-region (region-beginning region-end)
   "Upper camelcase the region between REGION-BEGINNING and REGION-END.
