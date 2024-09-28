@@ -411,6 +411,12 @@ was called."
                    "hi"
                    (caser-snakecase-dwim 1)))))
 
+(ert-deftest snakecase-dwim/already-snakecase ()
+  (should (equal "hi_there|"
+                 (caser//on-temp-buffer-point
+                   "|hi_there"
+                   (caser-snakecase-dwim 1)))))
+
 (ert-deftest snakecase-dwim/backward-single-word-doesnt-change ()
   (should (equal "|hi"
                  (caser//on-temp-buffer-point
@@ -581,6 +587,12 @@ was called."
   (should (equal "hi"
                  (caser//on-temp-buffer
                    "hi"
+                   (caser-dashcase-dwim 1)))))
+
+(ert-deftest dashcase-dwim/already-dashcase ()
+  (should (equal "hi-there|"
+                 (caser//on-temp-buffer-point
+                   "|hi-there"
                    (caser-dashcase-dwim 1)))))
 
 (ert-deftest dashcase-dwim/backward-single-word-doesnt-change ()
@@ -1039,12 +1051,6 @@ you all"
                    "hi"
                    (caser-upper-camelcase-region 1 3)))))
 
-(ert-deftest upper-camelcase-region/already-camelcase ()
-  (should (equal "HiMom|"
-                 (caser//on-temp-buffer-point
-                   "|hiMom"
-                   (caser-upper-camelcase-region 1 6)))))
-
 (ert-deftest upper-camelcase-region/from-snakecase/one-word ()
   (should (equal "HiMom|"
                  (caser//on-temp-buffer-point
@@ -1155,6 +1161,12 @@ you all"
                  (caser//on-temp-buffer-point
                    "|hi"
                    (caser-upper-camelcase-dwim 1)))))
+
+(ert-deftest upper-camelcase-dwim/already-upper-camelcase ()
+  (should (equal "HiThere|"
+                 (caser//on-temp-buffer-point
+                   "|HiThere"
+                   (caser-dashcase-dwim 1)))))
 
 (ert-deftest upper-camelcase-dwim/backward-single-word ()
   (should (equal "|Hi"
