@@ -1,4 +1,4 @@
-;;; caser.el --- Change text casing from camelCase to dash-case to snake_case -*- lexical-binding: t; -*-
+;;; caser.el --- Change text casing from camelCase to UpperCamelCase to dash-case to snake_case -*- lexical-binding: t; -*-
 
 ;; Version: 0.1
 ;; Homepage: https://hg.sr.ht/~zck/caser.el
